@@ -60,7 +60,7 @@ post_install_separator() {
 
 # determines the the CPU's instruction set
 get_isa() {
-  if uname -m | grep -q arm ; then
+  if uname -m | grep -q aarch64 ; then
     echo arm
   else
     echo x86
@@ -138,7 +138,11 @@ do_ubuntu_install() {
     apt_install_dependencies g++ gcc libc6-dev libffi-dev libgmp-dev make xz-utils zlib1g-dev git gnupg
   }
 
-  if is_64_bit ; then
+  if is_arm ; then
+    install_dependencies
+    print_bindist_notice
+    install_arm_binary
+  elif is_64_bit ; then
     install_dependencies
     print_bindist_notice
     install_64bit_standard_binary
@@ -460,7 +464,7 @@ install_from_bindist() {
 }
 
 install_arm_binary() {
-  install_from_bindist "linux-arm"
+  install_from_bindist "linux-aarch64"
 }
 
 install_32bit_standard_binary() {
